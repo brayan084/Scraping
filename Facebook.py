@@ -51,7 +51,7 @@ def Scraping_Facebook(Urls):
         me_gusta = driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div/div/div[1]/div[2]/div/div/div/div[3]/div/div/div[2]/span/a[1]').text
         me_gusta = ' '.join(me_gusta.split()[:2])
 
-        response = {'Nombre': Nombre, 'Seguidores': seguidores, 'Me Gusta': me_gusta}
+        response = {'Url': url, 'Nombre': Nombre, 'Seguidores': seguidores, 'Me Gusta': me_gusta}
         result_list.append(response)
 
         index += 1

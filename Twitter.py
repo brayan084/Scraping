@@ -34,7 +34,7 @@ def Scraping_Twitter(Urls:list):
             Posts = ' '.join(Posts[:1])
             
             
-        response = {'Nombre': Nombre, 'Seguidores': Seguidores, 'Siguiendo': Siguiendo, 'Posts': Posts}
+        response = {'Url': url, 'Nombre': Nombre, 'Seguidores': Seguidores, 'Siguiendo': Siguiendo, 'Posts': Posts}
         result_list.append(response)
 
         index += 1

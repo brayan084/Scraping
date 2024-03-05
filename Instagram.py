@@ -55,7 +55,7 @@ def Scraping_Instagram(Urls:list):
         # print(Publicaciones)
         
         
-        response = {'Nombre': Nombre, 'Seguidores': seguidores, 'Seguidos': Seguidos, 'Publicaciones': Publicaciones}
+        response = {'Url': url, 'Nombre': Nombre, 'Seguidores': seguidores, 'Seguidos': Seguidos, 'Publicaciones': Publicaciones}
         result_list_ig.append(response)
 
         index_ig += 1

@@ -29,7 +29,7 @@ def Scraping_Youtube(Urls:list):
         
         Videos = driver.find_element(By.XPATH, '/html/body/ytd-app/div[1]/ytd-page-manager/ytd-browse/div[3]/ytd-c4-tabbed-header-renderer/tp-yt-app-header-layout/div/tp-yt-app-header/div/div[2]/div/div[1]/div/div[1]/span[4]/yt-formatted-string/span[1]').text
         
-        response = {'Nombre': Nombre, 'Nombre_Canal': Nombre_Canal, 'Subscripciones': Subscripciones, 'Videos': Videos}
+        response = {'Url': url, 'Nombre': Nombre, 'Nombre_Canal': Nombre_Canal, 'Subscripciones': Subscripciones, 'Videos': Videos}
         result_list_YT.append(response)
 
         index_YT += 1

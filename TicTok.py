@@ -31,7 +31,7 @@ def Scraping_TikTok(Urls:list):
         
         Descripcion = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[2]/div/div/div[1]/h2').text
         
-        response = {'Nombre': Nombre, 'Seguidores': seguidores, 'Siguiendo': Siguiendo, 'Me Gusta': Me_Gusta, 'Descripcion': Descripcion}
+        response = {'Url': url, 'Nombre': Nombre, 'Seguidores': seguidores, 'Siguiendo': Siguiendo, 'Me Gusta': Me_Gusta, 'Descripcion': Descripcion}
         result_list.append(response)
 
         index += 1

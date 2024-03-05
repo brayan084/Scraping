@@ -1,4 +1,4 @@
-Importamte para que funcione el Scraper de la redes sociales
+Importante para que funcione el Scraper de la redes sociales
 
 1. para hacer scraping en facebook e instagram se debe tener una cuenta para poder hacer el scraping.
 

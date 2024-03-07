@@ -1,6 +1,5 @@
 import pandas as pd
 
-
 from Facebook import Scraping_Facebook
 from Twitter import Scraping_Twitter
 from Youtube import Scraping_Youtube
@@ -9,6 +8,7 @@ from TicTok import Scraping_TikTok
 
 def convertir_a_numero(numero):
     
+    numero = numero.replace('suscriptores', '').strip()
     numero = numero.replace(' ', '').replace(',', '')
     if numero.endswith(('K', 'k')):
         return '{:,.0f}'.format(float(numero[:-1]) * 1000).replace(',', '.')
@@ -25,36 +25,41 @@ def convertir_a_numero(numero):
 
 def Run_All():
     
-    
-    df_TIK = pd.DataFrame(Scraping_TikTok(urls_TIK))
+    # # Tiktok a funciona con el vpn es lento pero funciona bien 
+    df_TIK = pd.DataFrame(Scraping_TikTok(lista_urls_TikTok))
     df_TIK['Seguidores'] = df_TIK['Seguidores'].apply(convertir_a_numero)
     df_TIK['Siguiendo'] = df_TIK['Siguiendo'].apply(convertir_a_numero)
     df_TIK['Me Gusta'] = df_TIK['Me Gusta'].apply(convertir_a_numero)
-    print(df_TIK.head())
+    print(df_TIK.head(30))
     
-    df_TW = pd.DataFrame(Scraping_Twitter(urls_TW))
+    
+    # # Twitter a funciona con el vpn es lento pero funciona bien 
+    df_TW = pd.DataFrame(Scraping_Twitter(lista_urls_Twitter))
     df_TW['Seguidores'] = df_TW['Seguidores'].apply(convertir_a_numero)
     df_TW['Siguiendo'] = df_TW['Siguiendo'].apply(convertir_a_numero)
     df_TW['Posts'] = df_TW['Posts'].apply(convertir_a_numero)
-    print(df_TW.head())
-        
-    df_YT = pd.DataFrame(Scraping_Youtube(urls_YT))
+    print(df_TW.head(30))
+    
+    # # YouTube ya funciona con el vpn es lento pero funciona bien        
+    df_YT = pd.DataFrame(Scraping_Youtube(lista_urls_Youtube))
     df_YT['Subscripciones'] = df_YT['Subscripciones'].apply(convertir_a_numero)
     df_YT['Videos'] = df_YT['Videos'].apply(convertir_a_numero)
-    print(df_YT.head())
+    print(df_YT.head(30))
     
-    df_IG = pd.DataFrame(Scraping_Instagram(urls_IG))
+    # # Instagram ya funciona con el vpn es lento pero funciona bien
+    df_IG = pd.DataFrame(Scraping_Instagram(lista_urls_Instagram))
     df_IG['Seguidores'] = df_IG['Seguidores'].apply(convertir_a_numero)
     df_IG['Seguidos'] = df_IG['Seguidos'].apply(convertir_a_numero)
     df_IG['Publicaciones'] = df_IG['Publicaciones'].apply(convertir_a_numero)
-    print(df_IG.head())
-        
-    df_FB = pd.DataFrame(Scraping_Facebook(urls_FB))
+    print(df_IG.head(30))
+    
+    # Facebook ya funciona con el vpn es lento pero funciona bien 
+    df_FB = pd.DataFrame(Scraping_Facebook(lista_urls_facebook))
     df_FB['Seguidores'] = df_FB['Seguidores'].apply(convertir_a_numero)
     df_FB['Me Gusta'] = df_FB['Me Gusta'].apply(convertir_a_numero)    
-    print(df_FB.head())
+    print(df_FB.head(30))
     
-    # Crear un ExcelWriter con el nombre del archivo Excel
+    # # Crear un ExcelWriter con el nombre del archivo Excel
     with pd.ExcelWriter('./Redes-Sociales.xlsx', engine='openpyxl') as writer:
         # Guardar cada DataFrame en una hoja diferente
         df_FB.to_excel(writer, sheet_name='Facebook', index=False)
@@ -66,10 +71,18 @@ def Run_All():
     print("DataFrames guardados en diferentes hojas de Excel exitosamente.")
     
     
-urls_FB = ['https://www.facebook.com/PandoraEspana/', 'https://www.facebook.com/tousjewelry', 'https://www.facebook.com/AristocrazySpain/'] 
-urls_IG = ['https://www.instagram.com/theofficialpandora/', 'https://www.instagram.com/tousjewelry/', 'https://www.instagram.com/aristocrazy/'] 
-urls_TIK = ['https://www.tiktok.com/@theofficialpandor', 'https://www.tiktok.com/@tousjewelry']
-urls_TW = ['https://twitter.com/PANDORA_Corp', 'https://twitter.com/tousjewelry']
-urls_YT = ['https://www.youtube.com/user/TheOfficialPandora', 'https://www.youtube.com/user/tousjewelry', 'https://www.youtube.com/@MrBeast']
+excel = 'E:\Sumate\Scraping\Backup - Importación de datos de APIs.xlsx'
+hoja = 'Empresas'
+
+data = pd.read_excel(excel, sheet_name=hoja)
+
+data.fillna('NO TIENE', inplace=True)
+
+lista_urls_facebook = data['RRSS - FB (URL)'].to_list()
+lista_urls_Instagram = data['RRSS - IG (URL)'].to_list()
+lista_urls_TikTok = data['RRSS - TT (URL)'].to_list()
+lista_urls_Twitter = data['RRSS - TW (URL)'].to_list()
+lista_urls_Youtube = data['RRSS - YT (URL)'].to_list()
+    
 
 Run_All()

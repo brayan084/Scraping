@@ -18,19 +18,42 @@ def Scraping_TikTok(Urls:list):
     index = 0
     while index < len(url_list):
         url = url_list[index]
-        driver.get(url)
         time.sleep(3)
-
-        Nombre = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[2]/div/div/div[1]/div[1]/div[2]/h1').text
-
-        seguidores = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[2]/div/div/div[1]/h3/div[2]/strong').text
-
-        Siguiendo = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[2]/div/div/div[1]/h3/div[1]/strong').text
-
-        Me_Gusta = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[2]/div/div/div[1]/h3/div[3]/strong').text
         
-        Descripcion = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[2]/div/div/div[1]/h2').text
+        if url == 'NO TIENE':
+            index += 1
+            continue
         
+        driver.get(url)
+        time.sleep(7)
+        
+    
+        try:    
+            Nombre = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[2]/div/div/div[1]/div[1]/div[2]/h1').text
+            # Nombre = driver.find_element(By.CSS_SELECTOR, '').text
+        except Exception:
+            Nombre = 'No hay nombre'
+        
+        try:
+            seguidores = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[2]/div/div/div[1]/h3/div[2]/strong').text
+        except Exception:
+            seguidores = 'No hay seguidores'
+            
+        try:
+            Siguiendo = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[2]/div/div/div[1]/h3/div[1]/strong').text
+        except Exception:
+            Siguiendo = 'No hay siguiendo'
+            
+        try:
+            Me_Gusta = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[2]/div/div/div[1]/h3/div[3]/strong').text
+        except Exception:
+            Me_Gusta = 'No hay me gusta'
+            
+        try:
+            Descripcion = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[2]/div/div/div[1]/h2').text
+        except Exception:
+            Descripcion = 'No hay descripción'
+            
         response = {'Url': url, 'Nombre': Nombre, 'Seguidores': seguidores, 'Siguiendo': Siguiendo, 'Me Gusta': Me_Gusta, 'Descripcion': Descripcion}
         result_list.append(response)
 

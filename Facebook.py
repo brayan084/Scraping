@@ -1,14 +1,8 @@
 from selenium import webdriver
 import time
-from dotenv import load_dotenv
-import os
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 
-load_dotenv()
-# Variables de entorno
-FACEBOOK_USER = os.getenv("FACEBOOK_USER_2")
-FACEBOOK_PASSWORD = os.getenv("FACEBOOK_PASSWORD_2")
 
 # Facebook
 def Scraping_Facebook(Urls):
@@ -18,20 +12,10 @@ def Scraping_Facebook(Urls):
     driver = webdriver.Chrome(service=service, options=options)
     driver.maximize_window()
 
-    driver.get("https://www.facebook.com/login/")
-
-    # login
-
-    time.sleep(5)
-    username = driver.find_element("css selector", "input[name='email']")
-    password = driver.find_element("css selector", "input[name='pass']")
-    username.clear()
-    password.clear()
-    username.send_keys(FACEBOOK_USER)
-    password.send_keys(FACEBOOK_PASSWORD)
-    driver.find_element("css selector", "button[type='submit']").click()
-    time.sleep(7)
-
+    driver.get("https://www.facebook.com/PandoraEspana")
+    time.sleep(3)
+    
+    driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/div[5]/div/div/div[1]/div/div[2]/div/div/div/div[1]/div/i').click()
 
     url_list = Urls
     result_list = []
@@ -72,6 +56,6 @@ def Scraping_Facebook(Urls):
         index += 1
     
     print('----------- Facebook ------------ \n')
-    print(result_list)
+    # print(result_list)
     
     return result_list

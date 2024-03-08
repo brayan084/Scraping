@@ -29,27 +29,37 @@ def Scraping_Youtube(Urls:list):
 
         try:
             Nombre = driver.find_element(By.XPATH, '/html/body/ytd-app/div[1]/ytd-page-manager/ytd-browse/div[3]/ytd-c4-tabbed-header-renderer/tp-yt-app-header-layout/div/tp-yt-app-header/div/div[2]/div/div[1]/div/div[1]/ytd-channel-name/div/div/yt-formatted-string').text
-            # Nombre = driver.find_element(By.ID, 'text').text
         except Exception:
-            Nombre = 'No hay nombre'
+            try:
+                Nombre = driver.find_element(By.XPATH, '/html/body/ytd-app/div[1]/ytd-page-manager/ytd-browse/div[3]/ytd-c4-tabbed-header-renderer/tp-yt-app-header-layout/div/tp-yt-app-header/div/div/div/div[1]/div/div[1]/ytd-channel-name/div/div/yt-formatted-string').text
+            except Exception:
+                Nombre = 'No hay nombre'
         try:
-            # Subscripciones = driver.find_element(By.ID, 'subscriber-count').text
             Subscripciones = driver.find_element(By.XPATH, '/html/body/ytd-app/div[1]/ytd-page-manager/ytd-browse/div[3]/ytd-c4-tabbed-header-renderer/tp-yt-app-header-layout/div/tp-yt-app-header/div/div[2]/div/div[1]/div/div[1]/span[3]/yt-formatted-string').text
             Subscripciones = ' '.join(Subscripciones.split()[:2])
         except Exception:
-            Subscripciones = 'No hay subscripciones'
+            try:
+                Subscripciones = driver.find_element(By.XPATH, '/html/body/ytd-app/div[1]/ytd-page-manager/ytd-browse/div[3]/ytd-c4-tabbed-header-renderer/tp-yt-app-header-layout/div/tp-yt-app-header/div/div/div/div[1]/div/div[1]/span[3]/yt-formatted-string').text
+                Subscripciones = ' '.join(Subscripciones.split()[:2])
+            except Exception:
+                Subscripciones = 'No hay subscripciones'
         try:
             Videos = driver.find_element(By.XPATH, '/html/body/ytd-app/div[1]/ytd-page-manager/ytd-browse/div[3]/ytd-c4-tabbed-header-renderer/tp-yt-app-header-layout/div/tp-yt-app-header/div/div[2]/div/div[1]/div/div[1]/span[4]/yt-formatted-string/span[1]').text
-            # Videos = driver.find_element(By.CSS_SELECTOR, '#videos-count > span:nth-child(1)').text
         except Exception:
-            Videos = 'No hay videos'
+            try:
+                Videos = driver.find_element(By.XPATH, '/html/body/ytd-app/div[1]/ytd-page-manager/ytd-browse/div[3]/ytd-c4-tabbed-header-renderer/tp-yt-app-header-layout/div/tp-yt-app-header/div/div/div/div[1]/div/div[1]/span[4]/yt-formatted-string/span[1]').text
+            except Exception:
+                Videos = 'No hay videos'
+        
+        
     
         response = {'Url': url, 'Nombre': Nombre, 'Subscripciones': Subscripciones, 'Videos': Videos}
+        # print(response)
         result_list_YT.append(response)
 
         index_YT += 1
 
     print('----------- Youtube ------------ \n')
-    print(result_list_YT)
+    # print(result_list_YT)
     
     return result_list_YT

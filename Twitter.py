@@ -1,14 +1,9 @@
 from selenium import webdriver
 import time
-from dotenv import load_dotenv
-import os
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
-
-load_dotenv()
-# Variables de entorno
-TWITTER_USER = os.getenv("TWITTER_USER")
-TWITTER_PASSWORD = os.getenv("TWITTER_PASSWORD")
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 # Twitter
 def Scraping_Twitter(Urls:list):
@@ -18,51 +13,62 @@ def Scraping_Twitter(Urls:list):
 
     driver.maximize_window()
     
-    # login
-    
-    driver.get("https://twitter.com/login")
-    
-    time.sleep(3)
-    username = driver.find_element(By.XPATH, "/html/body/div/div/div/div[1]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[5]/label/div/div[2]/div/input")
-    username.clear()
-    username.send_keys(TWITTER_USER)
-    driver.find_element(By.XPATH, "/html/body/div/div/div/div[1]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[6]/div/span/span").click()
-    time.sleep(3)
-    password = driver.find_element(By.XPATH, "/html/body/div/div/div/div[1]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[1]/div/div/div[3]/div/label/div/div[2]/div[1]/input")
-    password.clear()
-    password.send_keys(TWITTER_PASSWORD)
-    driver.find_element(By.XPATH, "/html/body/div/div/div/div[1]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div[1]/div/div/div/div/span/span").click()
-    time.sleep(6)
+    # start_time = time.time()
+    driver.get("https://twitter.com/apify")
 
+    
     url_list = Urls
     result_list = []
 
     index = 0
     while index < len(url_list):
         url = url_list[index]
-        time.sleep(2)
+        time.sleep(6)
                 
         if url == 'NO TIENE':
             index += 1
             continue
         
+        # start_time1 = time.time()
         driver.get(url)
-        time.sleep(5)
+        try:
+            # lo que hace esto es basicamente es esperar a que se carguen los datos que buscamos y hay sigue ejecutandoce
+            WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/div/div/div[5]/div[1]/a/span[1]/span")))
+                
+        except Exception:
+            try:
+                WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[1]/div[1]/div/div/div/div/div/div[2]/div/h2/div/div/div/div/span[1]/span/span[1]")))
+            except Exception:
+                response_404 = {'Url': url, 'Nombre': 'No hay nombre', 'Seguidores': 'No hay seguidores', 'Siguiendo': 'No hay siguiendo', 'Posts': 'No hay posts'}
+                result_list.append(response_404)
+                # print(response_404)
+                index += 1
+                continue
+                
 
         try:
             Nombre = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div[1]/div/div[1]/div/div/span/span[1]').text
         except Exception:
-            Nombre = 'No hay nombre'
+            try:
+                Nombre = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[1]/div[1]/div/div/div/div/div/div[2]/div/h2/div/div/div/div/span[1]/span/span[1]').text
+            except Exception:
+                Nombre = 'No hay nombre'
         
         try:
             Seguidores = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/div/div/div[5]/div[2]/a/span[1]/span').text
         except Exception:
-            Seguidores = 'No hay seguidores'
+            try:
+                Seguidores = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/div[1]/div/div[5]/div[2]/div/span[1]/span').text
+            except Exception:
+                Seguidores = 'No hay seguidores'
             
         try:
             Siguiendo = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/div/div/div[5]/div[1]/a/span[1]/span').text
         except Exception:
-            Siguiendo = 'No hay siguiendo'
+            try:
+                Siguiendo = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/div[1]/div/div[5]/div[1]/div/span[1]/span').text
+            except Exception:
+                Siguiendo = 'No hay siguiendo'
             
         try:
             Posts = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[1]/div[1]/div/div/div/div/div/div[2]/div/div').text
@@ -73,14 +79,27 @@ def Scraping_Twitter(Urls:list):
             else: 
                 Posts = ' '.join(Posts[:1])
         except Exception:
+            # try:
+            #     Posts = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[1]/div[1]/div/div/div/div/div/div[2]/div/div').text
+            #     Posts = Posts.split()
+            
+            #     if Posts[1] == 'mil' or Posts[1] == 'mill':
+            #         Posts = ' '.join(Posts[:2])
+            #     else: 
+            #         Posts = ' '.join(Posts[:1])
+            # except Exception:
             Posts = 'No hay posts'
             
+            
         response = {'Url': url, 'Nombre': Nombre, 'Seguidores': Seguidores, 'Siguiendo': Siguiendo, 'Posts': Posts}
+        # print(response)
         result_list.append(response)
 
         index += 1
 
+        
+        
     print('----------- Twitter ------------ \n')
-    print(result_list)
+    # print(result_list)
 
     return result_list

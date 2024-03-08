@@ -60,5 +60,5 @@ def Scraping_TikTok(Urls:list):
         index += 1
         
     print('----------- TikTok ------------ \n')
-    print(result_list)
+    # print(result_list)
     return result_list

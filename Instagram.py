@@ -1,15 +1,7 @@
 from selenium import webdriver
 import time
-from dotenv import load_dotenv
-import os
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
-
-
-load_dotenv()
-# Variables de entorno
-INSTAGRAM_USER = os.getenv("INSTAGRAM_USER_2")
-INSTAGRAM_PASSWORD = os.getenv("INSTAGRAM_PASSWORD_2")
 
 
 # instagram
@@ -20,18 +12,12 @@ def Scraping_Instagram(Urls:list):
     driver = webdriver.Chrome(service=service, options=options)
     driver.maximize_window()    
 
-    driver.get("https://www.instagram.com/accounts/login/")
-
-    # login
-    time.sleep(5)
-    usernameIG = driver.find_element("css selector", "input[name='username']")
-    passwordIG = driver.find_element("css selector", "input[name='password']")
-    usernameIG.clear()
-    passwordIG.clear()
-    usernameIG.send_keys(INSTAGRAM_USER)
-    passwordIG.send_keys(INSTAGRAM_PASSWORD)
-    driver.find_element("css selector", "button[type='submit']").click()
-    time.sleep(8)
+    driver.get("https://www.instagram.com/theofficialpandora/")
+    time.sleep(6)
+    
+    # si la ip es de estados unidos tiene que estar comentado esto
+    driver.find_element(By.XPATH, '/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div[2]/div/button[1]').click()
+    time.sleep(1)
 
     url_list_ig = Urls
     result_list_ig = []
@@ -46,24 +32,24 @@ def Scraping_Instagram(Urls:list):
             continue
         
         driver.get(url)
-        time.sleep(4)
+        time.sleep(3)
         try:
-            Nombre = driver.find_element(By.XPATH, '/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div[2]/section/main/div/header/section/div[1]/a/h2').text
+            Nombre = driver.find_element(By.XPATH, '/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[2]/section/main/div/header/section/div[1]/h2').text
             # print(Nombre)
         except Exception:
             Nombre = 'No hay nombre'
         try:
-            seguidores = driver.find_element(By.XPATH, '/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div[2]/section/main/div/header/section/ul/li[2]/a/span/span').text
+            seguidores = driver.find_element(By.XPATH, '/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[2]/section/main/div/header/section/ul/li[2]/button/span/span').text
             # print(seguidores)
         except Exception:
             seguidores = 'No hay seguidores'
         try:
-            Seguidos = driver.find_element(By.XPATH, '/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div[2]/section/main/div/header/section/ul/li[3]/a/span/span').text
+            Seguidos = driver.find_element(By.XPATH, '/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[2]/section/main/div/header/section/ul/li[3]/button/span/span').text
             # print(Seguidos)
         except Exception:
             Seguidos = 'No hay seguidos'
         try:
-            Publicaciones = driver.find_element(By.XPATH, '/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div[2]/section/main/div/header/section/ul/li[1]/span/span').text
+            Publicaciones = driver.find_element(By.XPATH, '/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[2]/section/main/div/header/section/ul/li[1]/button/span/span').text
             # print(Publicaciones)
         except Exception:
             Publicaciones = 'No hay publicaciones'
@@ -71,6 +57,7 @@ def Scraping_Instagram(Urls:list):
         
         
         response = {'Url': url, 'Nombre': Nombre, 'Seguidores': seguidores, 'Seguidos': Seguidos, 'Publicaciones': Publicaciones}
+        print(response)
         result_list_ig.append(response)
 
         index_ig += 1
